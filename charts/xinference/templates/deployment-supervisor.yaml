@@ -93,19 +93,23 @@ spec:
         volumeMounts:
           - mountPath: {{ .Values.config.persistence.mountPath }}
             name: xinference-home
+{{- end }}
+{{- if .Values.config.auth.enabled }}
+        volumeMounts:
+          - mountPath: {{ .Values.config.auth.volumeMounts.mountPath }}
+            name: {{ .Values.config.auth.volumeMounts.name }}
+{{- end }}
+{{- if .Values.config.persistence.enabled }}
       volumes:
         - name: xinference-home
           persistentVolumeClaim:
             claimName: xinference-shared-volume-claim
 {{- end }}
 {{- if .Values.config.auth.enabled }}
-        volumeMounts:
-          - mountPath: {{ .Values.config.auth.volumeMounts.umountPath }}
-            name: {{ .Values.config.auth.volumeMounts.name }}
       volumes:
         - name: {{ .Values.config.auth.volumes.name }}
-        - configMap:
-	    name: {{ .Values.config.auth.volumes.configMap.name }}
+          configMap:
+            name: {{ .Values.config.auth.volumes.configMap.name }}
 {{- end }}
 
 ---
